@@ -11,13 +11,14 @@ import DocumentAddress from "./frontend/contractsData/Documents-address.json"
 
 // Import Files for Frontend
 import Navigation from "./frontend/components/Navbar";
+import Send from "./frontend/components/Send"
 
 
 
 function App() {
   const [ loading, setLoading ] = useState(true)
   const [ account, setAccount ] = useState(null)
-  const [ voter, setVoter ] = useState({});
+  const [ document, setDocument ] = useState({});
   // MetaMask Login/Connect
   const web3Handler = async () => {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -40,7 +41,7 @@ function App() {
   const loadContracts = async (signer) => {
     // Get deployed copies of contracts
     const Document = new ethers.Contract(DocumentAddress.address, DocumentAbi.abi, signer);
-    setVoter(Document)
+    setDocument(Document)
     setLoading(false)
   }
 
@@ -49,12 +50,12 @@ function App() {
       <div>
         <Navigation web3Handler={web3Handler} account={account} />
       </div>
-      {/* <Routes>
+      <Routes>
         <Route path='/' element />
-        <Route path="/senddoc" element/>
+        <Route path="/senddoc" element={<Send document={document} account={account} />}/>
         <Route path="/verifydoc" element/>
         <Route path="/getdoc" element />
-      </Routes> */}
+      </Routes>
     </BrowserRouter>
 
   );
